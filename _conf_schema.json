@@ -1,0 +1,14 @@
+{
+  "enable_random": {
+    "description": "随机模式",
+    "type": "bool",
+    "default": true,
+    "hint": "开启后每次随机推荐；关闭则按列表顺序循环推荐"
+  },
+  "trigger_keywords": {
+    "description": "触发关键词（半角逗号分隔）",
+    "type": "string",
+    "default": "吃什么",
+    "hint": "消息中包含任一关键词时触发，多个关键词用逗号分隔，如：吃什么,吃啥,吃点啥"
+  }
+}
