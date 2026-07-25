@@ -14,7 +14,7 @@ import random
 
 from astrbot.api.event import filter, AstrMessageEvent
 from astrbot.api.star import Context, Star
-from astrbot.api.message_components import Comp
+import astrbot.api.message_components as Comp
 from astrbot.api import logger
 
 
