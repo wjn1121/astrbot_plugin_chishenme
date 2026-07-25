@@ -22,8 +22,8 @@ class WhatToEat(Star):
     """
     "吃什么" 插件主类。
 
-    继承 Star（AstrBot 插件基类），通过 @filter.on_message()
-    监听群消息，匹配关键词后随机推荐食物。
+    继承 Star（AstrBot 插件基类），通过 @filter.regex()
+    被动监听群消息（无需唤醒前缀），匹配关键词后随机推荐食物。
     """
 
     def __init__(self, context: Context):
@@ -92,63 +92,37 @@ class WhatToEat(Star):
     # 消息处理
     # ──────────────────────────────────────────────
 
-    @filter.on_message()
+    @filter.regex(r"吃[的啥什么]?|((今天|中午|晚上|明天|早上|下午|想吃|推荐|建议|随便|来点?)吃啥)")
     @filter.event_message_type(filter.EventMessageType.GROUP_MESSAGE)
     @filter.platform_adapter_type(filter.PlatformAdapterType.AIOCQHTTP)
     async def on_what_to_eat(self, event: AstrMessageEvent):
         """
         监听 QQ 群消息，匹配触发关键词后回复食物推荐。
 
-        触发条件：
-          1. 消息类型为群消息（GROUP_MESSAGE）
-          2. 平台为 aiocqhttp（QQ）
-          3. 消息文本包含预设的触发关键词
+        装饰器说明：
+          - @filter.regex: 用正则匹配消息正文，无需唤醒前缀（用户无需 / 或 @机器人）
+          - @filter.event_message_type: 限制仅群聊消息
+          - @filter.platform_adapter_type: 限制仅 QQ 平台
 
-        装饰器说明 —— 这三个 @filter 叠加后，只有同时满足以下条件的消息才会进入此函数：
-          - 来自 QQ 群聊（非私聊、非其他平台）
-          - 消息正文包含任一触发关键词
+        三个条件同时满足（AND 逻辑），消息才会进入此 handler。
         """
-        # ── 1. 获取消息文本 ──
-        msg = event.get_message_str().strip()
-
-        # ── 2. 关键词匹配 ──
-        if not self._match_keywords(msg):
-            return  # 不包含关键词，不做任何处理
-
-        # ── 3. 检查菜品数据是否可用 ──
+        # ── 1. 检查菜品数据是否可用 ──
         if not self.foods:
             yield event.plain_result("菜单还没准备好，请联系管理员检查插件数据~")
             return
 
-        # ── 4. 选取一道菜 ──
+        # ── 2. 选取一道菜 ──
         food = self._pick_food()
 
-        # ── 5. 构建回复消息链（文本 + 图片） ──
+        # ── 3. 构建回复消息链（文本 + 图片） ──
         chain = self._build_reply(food)
 
-        # ── 6. 发送 ──
+        # ── 4. 发送 ──
         yield event.chain_result(chain)
 
     # ──────────────────────────────────────────────
     # 辅助方法
     # ──────────────────────────────────────────────
-
-    def _match_keywords(self, msg: str) -> bool:
-        """
-        检查消息是否包含任一触发关键词。
-
-        关键词来源：config.trigger_keywords（默认 "吃什么"），
-        支持半角逗号分隔多个关键词。
-        """
-        # 读取配置中的关键词，默认 "吃什么"
-        keywords_str = self.config.get("trigger_keywords", "吃什么")
-        # 按逗号拆分，去首尾空白，过滤空字符串
-        keywords = [kw.strip() for kw in keywords_str.split(",") if kw.strip()]
-
-        for kw in keywords:
-            if kw in msg:
-                return True
-        return False
 
     def _pick_food(self) -> dict:
         """

@@ -52,21 +52,21 @@ astrbot_plugin_what2eat/          # 插件根目录，放入 AstrBot/data/plugin
 ## 核心逻辑流程
 
 ```
-群消息 → @filter.on_message() 监听
-  → event.get_message_str() 获取文本
-  → 检测是否含 "吃什么"
-  → 是 → random.choice(foods) 随机选一条
-       → os.path.join(plugin_dir, food["image"]) 拼接图片路径
-       → MessageChain 组合文本 + Comp.Image.fromFileSystem()
-       → yield event.chain_result() 回复
-  → 否 → return（不处理）
+群消息 → @filter.regex(r"吃[的啥什么]?|...") 监听（无需唤醒前缀）
+  → @filter.event_message_type(GROUP_MESSAGE) → 仅群聊
+  → @filter.platform_adapter_type(AIOCQHTTP)   → 仅 QQ
+  → 三个条件同时满足 → 进入 handler
+  → random.choice(foods) 随机选一条
+  → os.path.join(plugin_dir, food["image"]) 拼接图片路径
+  → chain = [Comp.Plain(...), Comp.Image.fromFileSystem(...)]
+  → yield event.chain_result(chain) 回复
 ```
 
 ## 关键设计决策
 
 ### 为何不用 @filter.command()
 
-用户输入是自然语言（"中午吃什么"），而非固定命令（`/吃什么`）。使用 `@filter.on_message()` + 手动关键词检测更符合场景。
+用户输入是自然语言（"中午吃什么"），而非固定命令（`/吃什么`）。使用 `@filter.regex()` 做被动关键词匹配，无需用户 @机器人或输入 `/` 前缀。
 
 ### 为何图片存本地而非 URL
 
@@ -89,6 +89,7 @@ if os.path.exists(image_path):
 通过装饰器叠加限制仅在 QQ 群聊生效，避免私聊或其他平台误触发：
 
 ```python
+@filter.regex(r"吃[的啥什么]?|((今天|中午|晚上|明天|早上|下午|想吃|推荐|建议|随便|来点?)吃啥)")
 @filter.event_message_type(filter.EventMessageType.GROUP_MESSAGE)
 @filter.platform_adapter_type(filter.PlatformAdapterType.AIOCQHTTP)
 ```
