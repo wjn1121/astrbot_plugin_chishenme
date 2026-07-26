@@ -1,8 +1,9 @@
-name: astrbot_plugin_what2eat        # 插件唯一标识，安装后作为目录名
+name: astrbot_plugin_chishenme       # 插件唯一标识，安装后作为目录名
 author: wjn1121                       # 你的名字/ID
 version: 1.0.0                        # 语义化版本号
 desc: QQ 群"吃什么"插件——随机推荐食物并附带图片
 short_desc: 随机推荐吃什么
+repo: https://github.com/wjn1121/astrbot_plugin_chishenme
 support_platforms:                    # 声明支持的平台（可选，写清楚方便用户筛选）
   - aiocqhttp
 astrbot_version: ">=4.16,<5"          # 兼容的 AstrBot 版本范围

@@ -43,7 +43,7 @@ class WhatToEat(Star):
         # 顺序推荐模式的游标（仅在 enable_random=false 时使用）
         self._seq_index = 0
 
-        logger.info(f"WhatToEat 插件已加载，共 {len(self.foods)} 道菜品")
+        logger.info(f"吃什么 插件已加载，共 {len(self.foods)} 道菜品")
 
     # ──────────────────────────────────────────────
     # 数据加载
@@ -92,7 +92,7 @@ class WhatToEat(Star):
     # 消息处理
     # ──────────────────────────────────────────────
 
-    @filter.regex(r"吃[的啥什么]?|((今天|中午|晚上|明天|早上|下午|想吃|推荐|建议|随便|来点?)吃啥)")
+    @filter.regex(r"吃什么")
     @filter.event_message_type(filter.EventMessageType.GROUP_MESSAGE)
     @filter.platform_adapter_type(filter.PlatformAdapterType.AIOCQHTTP)
     async def on_what_to_eat(self, event: AstrMessageEvent):
@@ -179,4 +179,4 @@ class WhatToEat(Star):
         这里无需特殊清理（无网络连接、无后台任务），
         保留空实现以便将来扩展。
         """
-        logger.info("WhatToEat 插件已卸载")
+        logger.info("吃什么 插件已卸载")

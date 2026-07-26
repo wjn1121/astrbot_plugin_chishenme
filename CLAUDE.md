@@ -11,7 +11,7 @@
 ## 目录结构
 
 ```
-astrbot_plugin_what2eat/          # 插件根目录，放入 AstrBot/data/plugins/
+astrbot_plugin_chishenme/         # 插件根目录，放入 AstrBot/data/plugins/
 ├── main.py                       # 插件入口，核心逻辑
 ├── metadata.yaml                 # 插件元信息（名称、版本、作者等）
 ├── _conf_schema.json             # WebUI 可视化配置项定义
@@ -52,7 +52,7 @@ astrbot_plugin_what2eat/          # 插件根目录，放入 AstrBot/data/plugin
 ## 核心逻辑流程
 
 ```
-群消息 → @filter.regex(r"吃[的啥什么]?|...") 监听（无需唤醒前缀）
+群消息 → @filter.regex(r"吃什么") 监听（无需唤醒前缀）
   → @filter.event_message_type(GROUP_MESSAGE) → 仅群聊
   → @filter.platform_adapter_type(AIOCQHTTP)   → 仅 QQ
   → 三个条件同时满足 → 进入 handler
@@ -89,14 +89,14 @@ if os.path.exists(image_path):
 通过装饰器叠加限制仅在 QQ 群聊生效，避免私聊或其他平台误触发：
 
 ```python
-@filter.regex(r"吃[的啥什么]?|((今天|中午|晚上|明天|早上|下午|想吃|推荐|建议|随便|来点?)吃啥)")
+@filter.regex(r"吃什么")
 @filter.event_message_type(filter.EventMessageType.GROUP_MESSAGE)
 @filter.platform_adapter_type(filter.PlatformAdapterType.AIOCQHTTP)
 ```
 
 ## AstrBot 插件规范要点
 
-- 主类必须继承 `aastrbot.api.star.Star`
+- 主类必须继承 `astrbot.api.star.Star`
 - 入口文件必须命名为 `main.py`
 - handler 前两个参数固定为 `self` 和 `event: AstrMessageEvent`
 - 回复方式推荐 `yield event.chain_result()` 或 `yield event.plain_result()`
