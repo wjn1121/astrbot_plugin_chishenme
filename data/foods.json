@@ -28,5 +28,6 @@
   {"name": "蒜蓉西兰花",   "image": "images/suanrongxilanhua.jpg"},
   {"name": "可乐鸡翅",     "image": "images/kelejichi.jpg"},
   {"name": "糖醋排骨",     "image": "images/tangcupaigu.jpg"},
-  {"name": "毛血旺",       "image": "images/maoxuewang.jpg"}
+  {"name": "毛血旺",       "image": "images/maoxuewang.jpg"},
+  {"name": "KFC",          "image": "images/kfc.jpg"}
 ]
