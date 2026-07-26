@@ -15,7 +15,7 @@ import random
 from astrbot.api.event import filter, AstrMessageEvent
 from astrbot.api.star import Context, Star
 import astrbot.api.message_components as Comp
-from astrbot.api import logger
+from astrbot.api import logger, AstrBotConfig
 
 
 class WhatToEat(Star):
@@ -26,13 +26,16 @@ class WhatToEat(Star):
     被动监听群消息（无需唤醒前缀），匹配关键词后随机推荐食物。
     """
 
-    def __init__(self, context: Context):
+    def __init__(self, context: Context, config: AstrBotConfig):
         """
         插件初始化：加载菜品数据和配置。
 
         context 由 AstrBot 框架注入，提供插件运行所需的上下文信息。
+        config 由 AstrBot 框架自动传入，对应 _conf_schema.json 定义的配置项。
         """
         super().__init__(context)
+
+        self.config = config
 
         # 插件根目录的绝对路径，用于拼接数据文件和图片文件的路径
         self.plugin_dir = os.path.dirname(os.path.abspath(__file__))
