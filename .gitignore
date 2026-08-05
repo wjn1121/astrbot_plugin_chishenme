@@ -11,5 +11,8 @@ __pycache__/
 .DS_Store
 Thumbs.db
 
+# Project doc (AI-generated, not for distribution)
+CLAUDE.md
+
 # Plugin runtime (AstrBot generates these)
 *.pyc

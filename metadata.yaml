@@ -1,4 +1,4 @@
-name: astrbot_plugin_chishenme       # 插件唯一标识，安装后作为目录名
+name: 吃什么                          # 插件名称，显示在 AstrBot 市场上
 author: wjn1121                       # 你的名字/ID
 version: 1.0.0                        # 语义化版本号
 desc: QQ 群"吃什么"插件——随机推荐食物并附带图片
